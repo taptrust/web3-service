@@ -13,8 +13,8 @@ Refer to Google Cloud documentation:
 
 Run `yarn install` to install dependencies, and `npm run dev` to start the development server. The server should be available at `localhost:8080`.
 
-Because Babel is used, source code is edited in the `src` folder and compiled to code in the `dist` folder. 
+Because Babel is used, source code is edited in the `src` folder and compiled to code in the `dist` folder.
 
 ## Deploying
 
-Run `cloud app deploy node/node-app.yaml`. Make sure you have run `gcloud auth login` and logged into an account that has permissions on Google Cloud to deploy the service.
+Run `gcloud app deploy node/node-app.yaml`. Make sure you have run `gcloud auth login` and logged into an account that has permissions on Google Cloud to deploy the service.

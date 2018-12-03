@@ -1,9 +1,4 @@
 
-// By default, the client will authenticate using the service account file
-// specified by the GOOGLE_APPLICATION_CREDENTIALS environment variable and use
-// the project specified by the GOOGLE_CLOUD_PROJECT environment variable. See
-// https://github.com/GoogleCloudPlatform/google-cloud-node/blob/master/docs/authentication.md
-// These environment variables are set automatically on Google App Engine
 const Datastore = require('@google-cloud/datastore');
 
 // Creates a client
@@ -45,7 +40,6 @@ const saveAccountAddress = (username, contractAddress) => {
       });
     });
   });
-
 };
 
 async function createAccount(username, publicKey){
@@ -53,7 +47,6 @@ async function createAccount(username, publicKey){
     // Also modify the line below to use the correct address for the deployed contract
     const contractAddress = '0x_test--' + username;
     const user = await saveAccountAddress(username, contractAddress);
-    console.log('returning user');
     return user;
 }
 
