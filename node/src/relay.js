@@ -4,7 +4,7 @@ const Datastore = require('@google-cloud/datastore');
 // Creates a client
 const datastore = new Datastore({
   projectId: 'tap-trust',
-  keyFilename: '../service_account.json'
+  keyFilename: 'service_account.json'
   // service_account.json is not included in git repository
 });
 
