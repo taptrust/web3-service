@@ -1,4 +1,3 @@
-
 const Datastore = require('@google-cloud/datastore');
 
 // Creates a client
