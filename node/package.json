@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist",
   "scripts": {
-    "dev": "nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
+    "dev": "nodemon -w src --exec \"set NODE_ADDRESS=http://localhost:9545 && babel-node src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
     "start": "node dist",
     "prestart": "npm run -s build",
@@ -18,9 +18,14 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-0": "^6.5.0",
     "body-parser": "^1.18.3",
-    "eslint": "^3.1.1",
-    "express": "^4.16.3",
-    "nodemon": "^1.9.2"
+    "chai": "^4.2.0",
+    "eslint": "^3.19.0",
+    "ethereumjs-tx": "^1.3.7",
+    "express": "^4.16.4",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.9.2",
+    "request": "^2.88.0",
+    "web3": "^1.0.0-beta.36"
   },
   "engines": {
     "node": ">=8.11.2",

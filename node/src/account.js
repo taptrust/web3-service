@@ -1,13 +1,17 @@
+const Tx = require('ethereumjs-tx');
 const Datastore = require('@google-cloud/datastore');
+const web3interface = require('./web3interface');
+const web3 = web3interface.web3;
+const ProxyWalletABI = web3interface.ProxyWalletABI;
+const signingAccount = web3interface.signingAccount;
+const FactoryContract = web3interface.FactoryContract;
 
 // Creates a client
 const datastore = new Datastore({
   projectId: 'tap-trust',
-  keyFilename: '../service_account.json'
+  keyFilename: 'service_account.json'
   // service_account.json is not included in git repository
 });
-
-
 
 /**
  * Retrieve the latest 10 user records from the database.
@@ -42,15 +46,44 @@ const saveAccountAddress = (username, contractAddress) => {
 };
 
 async function createAccount(username, publicKey){
-    // TODO: Use Infura to deploy user contract with specified username/publicKey
-    // Also modify the line below to use the correct address for the deployed contract
-    const contractAddress = '0x_test--' + username;
-    const user = await saveAccountAddress(username, contractAddress);
+	var pubKey = web3.utils.hexToBytes(publicKey);
+	var nextNonce = await web3interface.nextNonce();
+	
+	var tx = {
+		gas:  web3.utils.toHex(3000000),
+		to: process.env.WALLET_FACTORY, 
+		data: FactoryContract.methods.createNewWallet(pubKey).encodeABI(),
+	};
+	
+	var signedTx = await signingAccount.signTransaction(tx);
+	
+	console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
+	
+	var result = await new Promise(function(resolve, reject) {
+		web3.eth.sendSignedTransaction(signedTx.rawTransaction)
+			.once('receipt', function(receipt){
+				var log = receipt.logs[0];
+				var topic = log.topics[1];
+				var address = "0x"+topic.substring(26);
+				console.log("found" + address);
+				resolve(address);
+			})
+			.on('transactionHash', console.log);
+	});
+	
+	console.log('Contract created at address: ' + result);
+
+    const user = await saveAccountAddress(username, result);
     return user;
 }
 
-
+async function getUserNonce(contractAddress){
+	var WalletContract = web3interface.getWalletContract(contractAddress);
+	var nextNonce = await WalletContract.methods.nextNonce().call();
+	
+	return nextNonce;
+}
 
 export {
-    getUsers, createAccount
+    getUsers, createAccount, getUserNonce
 };
