@@ -49,6 +49,7 @@ app.all('/getUserNonce', (req, res, next) => {
 	account.getUserNonce(req.query.address)
     .then((nonce) => {
 		console.log(nonce);
+		res.json({'nonce': nonce});
     })
     .catch(next);
 });
