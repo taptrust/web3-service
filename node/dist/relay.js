@@ -14,14 +14,14 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var relayMessage = function () {
-  var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, message) {
+  var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, signature, contractAddress, action, txParams) {
     var result;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return relayMessageSend(username, message);
+            return relayMessageSend(username, signature, contractAddress, action, txParams);
 
           case 2:
             result = _context.sent;
@@ -35,7 +35,7 @@ var relayMessage = function () {
     }, _callee, this);
   }));
 
-  return function relayMessage(_x, _x2) {
+  return function relayMessage(_x, _x2, _x3, _x4, _x5) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -43,15 +43,16 @@ var relayMessage = function () {
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Datastore = require('@google-cloud/datastore');
+var web3 = require('./web3interface').web3;
 
 // Creates a client
 var datastore = new Datastore({
   projectId: 'tap-trust',
-  keyFilename: '../service_account.json'
+  keyFilename: 'service_account.json'
   // service_account.json is not included in git repository
 });
 
-var relayMessageSend = function relayMessageSend(username, message) {
+var relayMessageSend = function relayMessageSend(username, signature, contractAddress, action, txParams) {
   // Right now the public key and username are already saved from the TapTrust python server.
   // Only the contract address needs to be saved at this time.
   var userKey = datastore.key(['User', username]);

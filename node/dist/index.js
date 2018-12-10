@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var account = require('./account');
 
 var relay = require('./relay');
-
 var app = express();
 
 app.use(bodyParser.json({ type: 'application/json' }));
@@ -22,8 +21,12 @@ app.all('/createAccount', function (req, res, next) {
 
 app.post('/relayMessage', function (req, res, next) {
   var username = req.body.username;
-  var message = req.body.message;
-  relay.relayMessage(username, message).then(function (result) {
+  var signature = req.body.signature;
+  var contractAddress = req.query.contractAddress;
+  var action = req.query.action;
+  var txParams = req.query.txParams;
+
+  relay.relayMessage(username, signature, contractAddress, action, txParams).then(function (result) {
     res.json({ result: result });
   });
 });
