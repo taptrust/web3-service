@@ -15,22 +15,41 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var createAccount = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, publicKey) {
-    var contractAddress, user;
+    var accounts, result, contractAddress, user;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            // TODO: Use Infura to deploy user contract with specified username/publicKey
-            // Also modify the line below to use the correct address for the deployed contract
-            contractAddress = '0x_test--' + username;
-            _context.next = 3;
+            _context.next = 2;
+            return web3.eth.getAccounts();
+
+          case 2:
+            accounts = _context.sent;
+
+
+            console.log(ProxyWalletBytecode);
+
+            _context.next = 6;
+            return new web3.eth.Contract(ProxyWalletABI).deploy({
+              data: ProxyWalletBytecode,
+              arguments: [['0x0eEB66338d9672Ba67a4342ECE388E4026f9b43d'], username, publicKey]
+            }).send({ gas: '1000000', from: accounts[0] });
+
+          case 6:
+            result = _context.sent;
+
+
+            console.log('Contract created at address: ' + result.options.address);
+
+            contractAddress = result.options.address;
+            _context.next = 11;
             return saveAccountAddress(username, contractAddress);
 
-          case 3:
+          case 11:
             user = _context.sent;
             return _context.abrupt('return', user);
 
-          case 5:
+          case 13:
           case 'end':
             return _context.stop();
         }
@@ -46,11 +65,23 @@ var createAccount = function () {
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Datastore = require('@google-cloud/datastore');
+var web3 = require('./web3interface').web3;
+
+var fs = require('fs');
+var ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
+var ProxyWalletABI = ProxyWallet['abi'];
+var ProxyWalletBytecode = JSON.stringify(ProxyWallet['bytecode']);
+
+var myContract = new web3.eth.Contract(ProxyWalletABI, {
+  from: '0x0eEB66338d9672Ba67a4342ECE388E4026f9b43d',
+  gas: '15000000',
+  gasPrice: 20000000000
+});
 
 // Creates a client
 var datastore = new Datastore({
   projectId: 'tap-trust',
-  keyFilename: '../service_account.json'
+  keyFilename: 'service_account.json'
   // service_account.json is not included in git repository
 });
 
