@@ -11,26 +11,26 @@ const datastore = new Datastore({
   // service_account.json is not included in git repository
 });
 
-async function relayMessageSave(username, signature, contractAddress, action, txParam, txHash) {
+async function relayMessageSave(username, signature, contractAddress, action, params, txHash) {
   const userKey = datastore.key(['User', username]);
   await datastore.get(userKey).then(results => {
       const entity = results[0];
       entity.txs = entity.txs || [];
 	  entity.txs.push({
 		  "action": action,
-		  "txParams": txParams,
+		  "params": params,
 		  "signature": signature,
 		  "txHash": txHash
 	  });
       datastore.upsert(entity).then(() => {
         // Entity updated successfully.
-        console.log('successfuly saved transaction record for ' + username);
+        console.log('successfully saved transaction record for ' + username);
         resolve(entity);
       });
     });
 };
 
-async function relayMessage(username, signature, contractAddress, action, txParams){
+async function relaySendTransactionMessage(username, signature, contractAddress, action, txParams){
 	var WalletContract = web3interface.getWalletContract(contractAddress);
 	
 	var receipt, error;
@@ -49,5 +49,5 @@ async function relayMessage(username, signature, contractAddress, action, txPara
 }
 
 export {
-    relayMessage
+    relaySendTransactionMessage
 };
