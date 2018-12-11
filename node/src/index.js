@@ -6,6 +6,7 @@ const account = require('./account');
 
 const relay = require('./relay');
 const app = express();
+require('dotenv').config();
 
 app.use(bodyParser.json({ type: 'application/json' }))
 
