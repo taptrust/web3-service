@@ -33,19 +33,29 @@ async function relayMessageSave(username, signature, contractAddress, action, pa
 async function relaySendTransactionMessage(username, signature, contractAddress, action, txParams){
 	var WalletContract = web3interface.getWalletContract(contractAddress);
 	
-	var receipt, error;
-	var nextNonce = await WalletContract.methods.sendTransaction(
-		nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, 
-		txParams.value, txParams.data, signature).send()
-			.on('transactionHash', function(_txHash) { 
-				relayMessageSave(username, signature, contractAddress, action, txParams, _txHash);} )
-			.on('receipt', function(_receipt){ receipt = _receipt; })
-			.on('error', function(_err,_receipt) { 
-				error = _err;
-				console.error(_err); 
-				receipt = _receipt; });
+	var tx = {
+		gas:  web3.utils.toHex(3000000),
+		to: contractAddress,
+		gasPrice: web3.utils.toHex(web3.utils.toBN(txParams.gasPrice)),
+		data: WalletContract.methods.sendTransaction(
+			txParams.nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, 
+			txParams.value, txParams.data, signature).encodeABI()
+	};
 	
-    return {"receipt" : receipt, "error" : error };
+	var signedTx = await signingAccount.signTransaction(tx);
+	
+	console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
+	
+	var receipt = await new Promise(function(resolve, reject) {
+		web3.eth.sendSignedTransaction(signedTx.rawTransaction)
+			.once('receipt', function(receipt){
+				resolve(receipt);
+			})
+			.on('transactionHash', console.log)
+			.on('error', reject);
+	});
+	
+    return {"receipt" : receipt};
 }
 
 export {

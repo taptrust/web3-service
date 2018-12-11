@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 node/service_account.json
 # Runtime data
+.env
 pids
 *.pid
 *.seed
