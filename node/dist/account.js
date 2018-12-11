@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createAccount = exports.getUsers = undefined;
+exports.getUserNonce = exports.createAccount = exports.getUsers = undefined;
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -15,41 +15,56 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var createAccount = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, publicKey) {
-    var accounts, result, contractAddress, user;
+    var pubKey, nextNonce, tx, signedTx, result, user;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
-            return web3.eth.getAccounts();
+            pubKey = web3.utils.hexToBytes(publicKey);
+            _context.next = 3;
+            return web3interface.nextNonce();
 
-          case 2:
-            accounts = _context.sent;
+          case 3:
+            nextNonce = _context.sent;
+            tx = {
+              gas: web3.utils.toHex(3000000),
+              to: process.env.WALLET_FACTORY,
+              data: FactoryContract.methods.createNewWallet(pubKey).encodeABI()
+            };
+            _context.next = 7;
+            return signingAccount.signTransaction(tx);
+
+          case 7:
+            signedTx = _context.sent;
 
 
-            console.log(ProxyWalletBytecode);
+            console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
 
-            _context.next = 6;
-            return new web3.eth.Contract(ProxyWalletABI).deploy({
-              data: ProxyWalletBytecode,
-              arguments: [['0x0eEB66338d9672Ba67a4342ECE388E4026f9b43d'], username, publicKey]
-            }).send({ gas: '1000000', from: accounts[0] });
+            _context.next = 11;
+            return new Promise(function (resolve, reject) {
+              web3.eth.sendSignedTransaction(signedTx.rawTransaction).once('receipt', function (receipt) {
+                var log = receipt.logs[0];
+                var topic = log.topics[1];
+                var address = "0x" + topic.substring(26);
+                console.log("found" + address);
+                resolve(address);
+              }).on('transactionHash', console.log);
+            });
 
-          case 6:
+          case 11:
             result = _context.sent;
 
 
-            console.log('Contract created at address: ' + result.options.address);
+            console.log('Contract created at address: ' + result);
 
-            contractAddress = result.options.address;
-            _context.next = 11;
-            return saveAccountAddress(username, contractAddress);
+            _context.next = 15;
+            return saveAccountAddress(username, result);
 
-          case 11:
+          case 15:
             user = _context.sent;
             return _context.abrupt('return', user);
 
-          case 13:
+          case 17:
           case 'end':
             return _context.stop();
         }
@@ -62,21 +77,43 @@ var createAccount = function () {
   };
 }();
 
+var getUserNonce = function () {
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(contractAddress) {
+    var WalletContract, nextNonce;
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            WalletContract = web3interface.getWalletContract(contractAddress);
+            _context2.next = 3;
+            return WalletContract.methods.nextNonce().call();
+
+          case 3:
+            nextNonce = _context2.sent;
+            return _context2.abrupt('return', nextNonce);
+
+          case 5:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function getUserNonce(_x3) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var Tx = require('ethereumjs-tx');
 var Datastore = require('@google-cloud/datastore');
-var web3 = require('./web3interface').web3;
-
-var fs = require('fs');
-var ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
-var ProxyWalletABI = ProxyWallet['abi'];
-var ProxyWalletBytecode = JSON.stringify(ProxyWallet['bytecode']);
-
-var myContract = new web3.eth.Contract(ProxyWalletABI, {
-  from: '0x0eEB66338d9672Ba67a4342ECE388E4026f9b43d',
-  gas: '15000000',
-  gasPrice: 20000000000
-});
+var web3interface = require('./web3interface');
+var web3 = web3interface.web3;
+var ProxyWalletABI = web3interface.ProxyWalletABI;
+var signingAccount = web3interface.signingAccount;
+var FactoryContract = web3interface.FactoryContract;
 
 // Creates a client
 var datastore = new Datastore({
@@ -118,4 +155,5 @@ var saveAccountAddress = function saveAccountAddress(username, contractAddress) 
 
 exports.getUsers = getUsers;
 exports.createAccount = createAccount;
+exports.getUserNonce = getUserNonce;
 //# sourceMappingURL=account.js.map

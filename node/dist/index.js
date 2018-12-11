@@ -12,16 +12,16 @@ var app = express();
 app.use(bodyParser.json({ type: 'application/json' }));
 
 app.all('/createAccount', function (req, res, next) {
-  var username = req.query.username;
   var publicKey = req.query.publicKey;
+  var username = req.query.username;
   account.createAccount(username, publicKey).then(function (user) {
     res.json({ contractAddress: user.contract_address });
   }).catch(next);
 });
 
 app.post('/relayMessage', function (req, res, next) {
-  var username = req.body.username;
-  var signature = req.body.signature;
+  var username = req.query.username;
+  var signature = req.query.signature;
   var contractAddress = req.query.contractAddress;
   var action = req.query.action;
   var txParams = req.query.txParams;
@@ -34,6 +34,13 @@ app.post('/relayMessage', function (req, res, next) {
 app.all('/getUsers', function (req, res, next) {
   account.getUsers().then(function (users) {
     res.status(200).set('Content-Type', 'text/plain').send('Last 10 users:\n' + users.join('\n')).end();
+  }).catch(next);
+});
+
+app.all('/getUserNonce', function (req, res, next) {
+  account.getUserNonce(req.query.address).then(function (nonce) {
+    console.log(nonce);
+    res.json({ 'nonce': nonce });
   }).catch(next);
 });
 
