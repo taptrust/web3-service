@@ -21,16 +21,24 @@ app.all('/createAccount', (req, res, next) => {
 });
 
 app.post('/relayMessage', (req, res, next) => {
-  let username = req.query.username;
-  let signature = req.query.signature;
-  let contractAddress = req.query.contractAddress;
-  let action = req.query.action;
-  let txParams = req.query.txParams;
+  let username = req.body.username;
+  let signature = req.body.signature;
+  let contractAddress = req.body.contractAddress;
+  let action = req.body.action;
+  let params = req.body.params;
+
+  switch (action) {
+    case 'sendTransaction':
+      relay.relaySendTransactionMessage(username, signature, contractAddress, action, params)
+        .then((result) => {
+          res.json({result: result});
+        });
+      break; 
+    default: 
+      res.json({'error': 'Action not recognized: ' + action});
+      break
+  }
   
-  relay.relayMessage(username, signature, contractAddress, action, txParams)
-    .then((result) => {
-      res.json({result: result});
-    });
 });
 
 app.all('/getUsers', (req, res, next) => {
@@ -45,7 +53,7 @@ app.all('/getUsers', (req, res, next) => {
     .catch(next);
 });
 
-app.all('/getUserNonce', (req, res, next) => {
+app.all('/getTxInfo', (req, res, next) => {
 	account.getUserNonce(req.query.address)
     .then((nonce) => {
 		console.log(nonce);
