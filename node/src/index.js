@@ -57,7 +57,7 @@ app.all('/getUsers', (req, res, next) => {
 app.all('/getTxInfo', (req, res, next) => {
 	account.getUserNonce(req.query.address)
     .then((nonce) => {
-		console.log(nonce);
+		console.log('got user nonce: ' + nonce);
 		res.json({'nonce': nonce});
     })
     .catch(next);

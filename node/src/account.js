@@ -66,7 +66,7 @@ async function createAccount(username, publicKey){
 				var log = receipt.logs[0];
 				var topic = log.topics[1];
 				var address = "0x"+topic.substring(26);
-				console.log("found" + address);
+				console.log("found address " + address);
 				resolve(address);
 			})
 			.on('transactionHash', console.log);

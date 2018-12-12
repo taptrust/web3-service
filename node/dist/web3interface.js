@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.nextNonce = exports.FactoryContract = exports.getWalletContract = exports.ProxyWalletABI = exports.signingAccount = exports.web3 = undefined;
+exports.nextNonce = exports.FactoryContract = exports.FactoryAddress = exports.getWalletContract = exports.ProxyWalletABI = exports.signingAccount = exports.web3 = undefined;
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -50,14 +50,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Web3 = require('web3');
 
-var web3 = new Web3(process.env.NODE_ADDRESS || 'https://ropsten.infura.io/v3/155f5547dd0e4ab09bded202e8bcc08a');
+var web3 = new Web3('https://ropsten.infura.io/v3/155f5547dd0e4ab09bded202e8bcc08a');
 var signingAccount = web3.eth.accounts.privateKeyToAccount('0x943eed2a06c4ba5991cf724ead779bebca00a7e47d3f29a2a334c7447a763b95'); //('0x' + process.env.TAPTRUST_PRIVATEKEY);
 
 var fs = require('fs');
 var ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
 var ProxyWalletABI = ProxyWallet['abi'];
 
-var FactoryAddress = process.env.WALLET_FACTORY || '0x8f0483125fcb9aaaefa9209d8e9d7b9c8b9fb90f';
+var FactoryAddress = '0x16ecd07bdb3c9d67fdec9e7759582d7aade8ad3f';
 var WalletFactory = JSON.parse(fs.readFileSync('./contracts/WalletFactory.json', 'utf8'));
 var WalletFactoryABI = WalletFactory['abi'];
 
@@ -81,6 +81,7 @@ exports.web3 = web3;
 exports.signingAccount = signingAccount;
 exports.ProxyWalletABI = ProxyWalletABI;
 exports.getWalletContract = getWalletContract;
+exports.FactoryAddress = FactoryAddress;
 exports.FactoryContract = FactoryContract;
 exports.nextNonce = nextNonce;
 //# sourceMappingURL=web3interface.js.map

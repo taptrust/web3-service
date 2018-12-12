@@ -28,7 +28,7 @@ var createAccount = function () {
             nextNonce = _context.sent;
             tx = {
               gas: web3.utils.toHex(3000000),
-              to: process.env.WALLET_FACTORY,
+              to: FactoryAddress,
               data: FactoryContract.methods.createNewWallet(pubKey).encodeABI()
             };
             _context.next = 7;
@@ -114,6 +114,7 @@ var web3 = web3interface.web3;
 var ProxyWalletABI = web3interface.ProxyWalletABI;
 var signingAccount = web3interface.signingAccount;
 var FactoryContract = web3interface.FactoryContract;
+var FactoryAddress = web3interface.FactoryAddress;
 
 // Creates a client
 var datastore = new Datastore({
