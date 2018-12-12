@@ -1,4 +1,4 @@
-const Tx = require('ethereumjs-tx');
+const FactoryAddress = web3interface.FactoryAddress;
 const Datastore = require('@google-cloud/datastore');
 const web3interface = require('./web3interface');
 const web3 = web3interface.web3;
@@ -47,11 +47,10 @@ const saveAccountAddress = (username, contractAddress) => {
 
 async function createAccount(username, publicKey){
 	var pubKey = web3.utils.hexToBytes(publicKey);
-	var nextNonce = await web3interface.nextNonce();
 	
 	var tx = {
 		gas:  web3.utils.toHex(3000000),
-		to: process.env.WALLET_FACTORY, 
+		to: FactoryAddress, 
 		data: FactoryContract.methods.createNewWallet(pubKey).encodeABI(),
 	};
 	
@@ -65,13 +64,31 @@ async function createAccount(username, publicKey){
 				var log = receipt.logs[0];
 				var topic = log.topics[1];
 				var address = "0x"+topic.substring(26);
-				console.log("found" + address);
+				console.log("found address " + address);
 				resolve(address);
 			})
 			.on('transactionHash', console.log);
 	});
 	
 	console.log('Contract created at address: ' + result);
+	
+	tx = {
+		gas:  web3.utils.toHex(100000),
+		value: web3.utils.toHex('10000000000000000')
+	};
+	
+	signedTx = await signingAccount.signTransaction(tx);
+	
+	console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
+	
+	await new Promise(function(resolve, reject) {
+		web3.eth.sendSignedTransaction(signedTx.rawTransaction)
+			.once('receipt', function(receipt){
+				resolve();
+			})
+			.on('transactionHash', console.log)
+			.on('error', console.error);
+	});
 
     const user = await saveAccountAddress(username, result);
     return user;

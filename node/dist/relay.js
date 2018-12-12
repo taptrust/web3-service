@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.relayMessage = undefined;
+exports.relaySendTransactionMessage = undefined;
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -14,7 +14,7 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var relayMessageSave = function () {
-	var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, signature, contractAddress, action, txParam, txHash) {
+	var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, signature, contractAddress, action, params, txHash) {
 		var userKey;
 		return _regenerator2.default.wrap(function _callee$(_context) {
 			while (1) {
@@ -27,13 +27,13 @@ var relayMessageSave = function () {
 							entity.txs = entity.txs || [];
 							entity.txs.push({
 								"action": action,
-								"txParams": txParams,
+								"params": params,
 								"signature": signature,
 								"txHash": txHash
 							});
 							datastore.upsert(entity).then(function () {
 								// Entity updated successfully.
-								console.log('successfuly saved transaction record for ' + username);
+								console.log('successfully saved transaction record for ' + username);
 								resolve(entity);
 							});
 						});
@@ -51,30 +51,41 @@ var relayMessageSave = function () {
 	};
 }();
 
-var relayMessage = function () {
+var relaySendTransactionMessage = function () {
 	var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(username, signature, contractAddress, action, txParams) {
-		var WalletContract, receipt, error, nextNonce;
+		var WalletContract, tx, signedTx, receipt;
 		return _regenerator2.default.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
 					case 0:
 						WalletContract = web3interface.getWalletContract(contractAddress);
-						_context2.next = 3;
-						return WalletContract.methods.sendTransaction(nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, txParams.value, txParams.data, signature).send().on('transactionHash', function (_txHash) {
-							relayMessageSave(username, signature, contractAddress, action, txParams, _txHash);
-						}).on('receipt', function (_receipt) {
-							receipt = _receipt;
-						}).on('error', function (_err, _receipt) {
-							error = _err;
-							console.error(_err);
-							receipt = _receipt;
+						tx = {
+							gas: web3.utils.toHex(3000000),
+							to: contractAddress,
+							gasPrice: web3.utils.toHex(new web3.utils.BN(txParams.gasPrice)),
+							data: WalletContract.methods.sendTransaction(txParams.nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, txParams.value, txParams.data, signature).encodeABI()
+						};
+						_context2.next = 4;
+						return signingAccount.signTransaction(tx);
+
+					case 4:
+						signedTx = _context2.sent;
+
+
+						console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
+
+						_context2.next = 8;
+						return new Promise(function (resolve, reject) {
+							web3.eth.sendSignedTransaction(signedTx.rawTransaction).once('receipt', function (receipt) {
+								resolve(receipt);
+							}).on('transactionHash', console.log).on('error', reject);
 						});
 
-					case 3:
-						nextNonce = _context2.sent;
+					case 8:
+						receipt = _context2.sent;
 						return _context2.abrupt('return', { "receipt": receipt, "error": error });
 
-					case 5:
+					case 10:
 					case 'end':
 						return _context2.stop();
 				}
@@ -82,7 +93,7 @@ var relayMessage = function () {
 		}, _callee2, this);
 	}));
 
-	return function relayMessage(_x7, _x8, _x9, _x10, _x11) {
+	return function relaySendTransactionMessage(_x7, _x8, _x9, _x10, _x11) {
 		return _ref2.apply(this, arguments);
 	};
 }();
@@ -104,5 +115,5 @@ var datastore = new Datastore({
 
 ;
 
-exports.relayMessage = relayMessage;
+exports.relaySendTransactionMessage = relaySendTransactionMessage;
 //# sourceMappingURL=relay.js.map
