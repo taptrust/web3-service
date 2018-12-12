@@ -1,4 +1,3 @@
-const Tx = require('ethereumjs-tx');
 const Datastore = require('@google-cloud/datastore');
 const web3interface = require('./web3interface');
 const web3 = web3interface.web3;
@@ -47,7 +46,6 @@ const saveAccountAddress = (username, contractAddress) => {
 
 async function createAccount(username, publicKey){
 	var pubKey = web3.utils.hexToBytes(publicKey);
-	var nextNonce = await web3interface.nextNonce();
 	
 	var tx = {
 		gas:  web3.utils.toHex(3000000),
