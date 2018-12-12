@@ -37,5 +37,5 @@ async function nextNonce() {
 }
 
 export {
-    web3, signingAccount, ProxyWalletABI, getWalletContract, FactoryContract, nextNonce
+    web3, signingAccount, ProxyWalletABI, getWalletContract, FactoryAddress, FactoryContract, nextNonce
 };

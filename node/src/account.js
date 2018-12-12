@@ -5,6 +5,7 @@ const web3 = web3interface.web3;
 const ProxyWalletABI = web3interface.ProxyWalletABI;
 const signingAccount = web3interface.signingAccount;
 const FactoryContract = web3interface.FactoryContract;
+const FactoryAddress = web3interface.FactoryAddress;
 
 // Creates a client
 const datastore = new Datastore({
@@ -51,7 +52,7 @@ async function createAccount(username, publicKey){
 	
 	var tx = {
 		gas:  web3.utils.toHex(3000000),
-		to: process.env.WALLET_FACTORY, 
+		to: FactoryAddress, 
 		data: FactoryContract.methods.createNewWallet(pubKey).encodeABI(),
 	};
 	
