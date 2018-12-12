@@ -35,9 +35,10 @@ async function relaySendTransactionMessage(username, signature, contractAddress,
 	
 	var tx = {
 		gas:  web3.utils.toHex(3000000),
-		to: process.env.WALLET_FACTORY, 
+		to: contractAddress,
+		gasPrice: web3.utils.toHex(new web3.utils.BN(txParams.gasPrice)),
 		data: WalletContract.methods.sendTransaction(
-			nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, 
+			txParams.nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, 
 			txParams.value, txParams.data, signature).encodeABI()
 	};
 	
