@@ -1,12 +1,12 @@
 // om namah shivay
-
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const account = require('./account');
 
 const relay = require('./relay');
 const app = express();
-require('dotenv').config();
+
 
 app.use(bodyParser.json({ type: 'application/json' }))
 
@@ -57,7 +57,7 @@ app.all('/getUsers', (req, res, next) => {
 app.all('/getTxInfo', (req, res, next) => {
 	account.getUserNonce(req.query.address)
     .then((nonce) => {
-		console.log(nonce);
+		console.log('got user nonce: ' + nonce);
 		res.json({'nonce': nonce});
     })
     .catch(next);

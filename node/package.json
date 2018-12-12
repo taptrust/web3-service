@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon -w src --exec \"set NODE_ADDRESS=http://localhost:9545 && babel-node src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
-    "start": "node dist",
+    "start": "node -r dotenv/config dist",
     "prestart": "npm run -s build",
     "test": "eslint src"
   },
