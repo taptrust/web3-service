@@ -1,12 +1,12 @@
 // om namah shivay
-
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const account = require('./account');
 
 const relay = require('./relay');
 const app = express();
-require('dotenv').config();
+
 
 app.use(bodyParser.json({ type: 'application/json' }))
 

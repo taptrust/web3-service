@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.relayMessage = undefined;
+exports.relaySendTransactionMessage = undefined;
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -14,7 +14,7 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var relayMessageSave = function () {
-	var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, signature, contractAddress, action, txParam, txHash) {
+	var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(username, signature, contractAddress, action, params, txHash) {
 		var userKey;
 		return _regenerator2.default.wrap(function _callee$(_context) {
 			while (1) {
@@ -27,13 +27,13 @@ var relayMessageSave = function () {
 							entity.txs = entity.txs || [];
 							entity.txs.push({
 								"action": action,
-								"txParams": txParams,
+								"params": params,
 								"signature": signature,
 								"txHash": txHash
 							});
 							datastore.upsert(entity).then(function () {
 								// Entity updated successfully.
-								console.log('successfuly saved transaction record for ' + username);
+								console.log('successfully saved transaction record for ' + username);
 								resolve(entity);
 							});
 						});
@@ -51,7 +51,7 @@ var relayMessageSave = function () {
 	};
 }();
 
-var relayMessage = function () {
+var relaySendTransactionMessage = function () {
 	var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(username, signature, contractAddress, action, txParams) {
 		var WalletContract, receipt, error, nextNonce;
 		return _regenerator2.default.wrap(function _callee2$(_context2) {
@@ -82,7 +82,7 @@ var relayMessage = function () {
 		}, _callee2, this);
 	}));
 
-	return function relayMessage(_x7, _x8, _x9, _x10, _x11) {
+	return function relaySendTransactionMessage(_x7, _x8, _x9, _x10, _x11) {
 		return _ref2.apply(this, arguments);
 	};
 }();
@@ -104,5 +104,5 @@ var datastore = new Datastore({
 
 ;
 
-exports.relayMessage = relayMessage;
+exports.relaySendTransactionMessage = relaySendTransactionMessage;
 //# sourceMappingURL=relay.js.map

@@ -50,8 +50,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Web3 = require('web3');
 
-var web3 = new Web3(process.env.NODE_ADDRESS);
-var signingAccount = web3.eth.accounts.privateKeyToAccount('0x' + process.env.TAPTRUST_PRIVATEKEY);
+var web3 = new Web3(process.env.NODE_ADDRESS || 'https://ropsten.infura.io/v3/155f5547dd0e4ab09bded202e8bcc08a');
+var signingAccount = web3.eth.accounts.privateKeyToAccount('0x943eed2a06c4ba5991cf724ead779bebca00a7e47d3f29a2a334c7447a763b95'); //('0x' + process.env.TAPTRUST_PRIVATEKEY);
 
 var fs = require('fs');
 var ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
