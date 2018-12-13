@@ -36,7 +36,7 @@ async function relaySendTransactionMessage(username, signature, contractAddress,
 	var tx = {
 		gas:  web3.utils.toHex(3000000),
 		to: contractAddress,
-		gasPrice: web3.utils.toHex(new web3.utils.BN(txParams.gasPrice)),
+		gasPrice: web3.utils.toHex(web3.utils.toBN(txParams.gasPrice)),
 		data: WalletContract.methods.sendTransaction(
 			txParams.nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, 
 			txParams.value, txParams.data, signature).encodeABI()
@@ -55,7 +55,7 @@ async function relaySendTransactionMessage(username, signature, contractAddress,
 			.on('error', reject);
 	});
 	
-    return {"receipt" : receipt, "error" : error };
+    return {"receipt" : receipt};
 }
 
 export {

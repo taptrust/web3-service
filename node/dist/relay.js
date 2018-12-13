@@ -62,7 +62,7 @@ var relaySendTransactionMessage = function () {
 						tx = {
 							gas: web3.utils.toHex(3000000),
 							to: contractAddress,
-							gasPrice: web3.utils.toHex(new web3.utils.BN(txParams.gasPrice)),
+							gasPrice: web3.utils.toHex(web3.utils.toBN(txParams.gasPrice)),
 							data: WalletContract.methods.sendTransaction(txParams.nonce, txParams.gasPrice, txParams.gasLimit, txParams.to, txParams.value, txParams.data, signature).encodeABI()
 						};
 						_context2.next = 4;
