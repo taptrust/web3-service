@@ -18,3 +18,5 @@ Because Babel is used, source code is edited in the `src` folder and compiled to
 ## Deploying
 
 Run `gcloud app deploy node/node-app.yaml`. Make sure you have run `gcloud auth login` and logged into an account that has permissions on Google Cloud to deploy the service.
+
+To see logs as request are sent, you can tail the logs with gcloud: `gcloud app logs tail -s web3`
