@@ -5,7 +5,7 @@
 
 runtime: nodejs
 env: flex
-service: web3
+service: web3-ropsten
 
 # The settings below are to reduce costs during testing and not appropriate for production use.
 # You would obviously want to increase the values for computing resources and look into auto scaling when running production workloads.
