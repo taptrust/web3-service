@@ -32,10 +32,11 @@ var createAccount = function () {
 					case 4:
 						signedTx = _context.sent;
 
-
+						console.log('Creating account with signing account ' + signingAccount.address);
+						console.log('Creating account with factory address ' + FactoryAddress);
 						console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
 
-						_context.next = 8;
+						_context.next = 10;
 						return new Promise(function (resolve, reject) {
 							web3.eth.sendSignedTransaction(signedTx.rawTransaction).once('receipt', function (receipt) {
 								var log = receipt.logs[0];
@@ -46,7 +47,7 @@ var createAccount = function () {
 							}).on('transactionHash', console.log);
 						});
 
-					case 8:
+					case 10:
 						result = _context.sent;
 
 
@@ -58,31 +59,31 @@ var createAccount = function () {
 							value: web3.utils.toHex('10000000000000000')
 						};
 
-						_context.next = 13;
+						_context.next = 15;
 						return signingAccount.signTransaction(tx);
 
-					case 13:
+					case 15:
 						signedTx = _context.sent;
 
 
 						console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
 
-						_context.next = 17;
+						_context.next = 19;
 						return new Promise(function (resolve, reject) {
 							web3.eth.sendSignedTransaction(signedTx.rawTransaction).once('receipt', function (receipt) {
 								resolve();
 							}).on('transactionHash', console.log).on('error', console.error);
 						});
 
-					case 17:
-						_context.next = 19;
+					case 19:
+						_context.next = 21;
 						return saveAccountAddress(username, result);
 
-					case 19:
+					case 21:
 						user = _context.sent;
 						return _context.abrupt('return', user);
 
-					case 21:
+					case 23:
 					case 'end':
 						return _context.stop();
 				}

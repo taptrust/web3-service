@@ -72,20 +72,23 @@ var relaySendTransactionMessage = function () {
 						signedTx = _context2.sent;
 
 
+						console.log('Relaying message with signing account ' + signingAccount.address);
+						console.log('Relaying message with user contract address ' + contractAddress);
+
 						console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
 
-						_context2.next = 8;
+						_context2.next = 10;
 						return new Promise(function (resolve, reject) {
 							web3.eth.sendSignedTransaction(signedTx.rawTransaction).once('receipt', function (receipt) {
 								resolve(receipt);
 							}).on('transactionHash', console.log).on('error', reject);
 						});
 
-					case 8:
-						receipt = _context2.sent;
-						return _context2.abrupt('return', { "receipt": receipt, "error": error });
-
 					case 10:
+						receipt = _context2.sent;
+						return _context2.abrupt('return', { "receipt": receipt });
+
+					case 12:
 					case 'end':
 						return _context2.stop();
 				}

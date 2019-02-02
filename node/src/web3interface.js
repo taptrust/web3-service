@@ -1,13 +1,12 @@
 const Web3 = require('web3');
-
-const web3 = new Web3('https://ropsten.infura.io/v3/155f5547dd0e4ab09bded202e8bcc08a');
-const signingAccount = web3.eth.accounts.privateKeyToAccount('0x943eed2a06c4ba5991cf724ead779bebca00a7e47d3f29a2a334c7447a763b95');//('0x' + process.env.TAPTRUST_PRIVATEKEY);
+const web3 = new Web3('https://web3.oasiscloud.io');
+const signingAccount = web3.eth.accounts.privateKeyToAccount('0x5FE054F073B46FDC587125D25EE272AC6278FD8DCDB14792D6C7BF52636E597B');//('0x' + process.env.TAPTRUST_PRIVATEKEY);
 
 const fs = require('fs');
 const ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
 const ProxyWalletABI = ProxyWallet['abi'];
 
-const FactoryAddress = '0x0820c70d1b68285d9987e462ecac29f85306eec0'; 
+const FactoryAddress = '0x670c562bdcac60256befae7f4534c99a10d32e72'; 
 const WalletFactory = JSON.parse(fs.readFileSync('./contracts/WalletFactory.json', 'utf8'));
 const WalletFactoryABI = WalletFactory['abi'];
 

@@ -43,7 +43,10 @@ async function relaySendTransactionMessage(username, signature, contractAddress,
 	};
 	
 	var signedTx = await signingAccount.signTransaction(tx);
-	
+
+  console.log(`Relaying message with signing account ${signingAccount.address}`);
+  console.log(`Relaying message with user contract address ${contractAddress}`);
+  
 	console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
 	
 	var receipt = await new Promise(function(resolve, reject) {

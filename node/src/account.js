@@ -55,9 +55,10 @@ async function createAccount(username, publicKey){
 	};
 	
 	var signedTx = await signingAccount.signTransaction(tx);
-	
+  console.log(`Creating account with signing account ${signingAccount.address}`);
+  console.log(`Creating account with factory address ${FactoryAddress}`);
 	console.log("Sending Raw Transaction: " + signedTx.rawTransaction);
-	
+
 	var result = await new Promise(function(resolve, reject) {
 		web3.eth.sendSignedTransaction(signedTx.rawTransaction)
 			.once('receipt', function(receipt){

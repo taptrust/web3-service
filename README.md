@@ -11,7 +11,7 @@ Refer to Google Cloud documentation:
 
 ## Local Development
 
-Run `yarn install` to install dependencies, and `npm run dev` to start the development server. The server should be available at `localhost:8080`.
+Run `yarn install` to install dependencies, and `npm run start` to start the development server. The server should be available at `localhost:8080`.
 
 Because Babel is used, source code is edited in the `src` folder and compiled to code in the `dist` folder.
 

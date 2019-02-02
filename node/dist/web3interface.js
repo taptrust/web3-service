@@ -49,15 +49,14 @@ var nextNonce = function () {
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Web3 = require('web3');
-
-var web3 = new Web3('https://ropsten.infura.io/v3/155f5547dd0e4ab09bded202e8bcc08a');
-var signingAccount = web3.eth.accounts.privateKeyToAccount('0x943eed2a06c4ba5991cf724ead779bebca00a7e47d3f29a2a334c7447a763b95'); //('0x' + process.env.TAPTRUST_PRIVATEKEY);
+var web3 = new Web3('https://web3.oasiscloud.io');
+var signingAccount = web3.eth.accounts.privateKeyToAccount('0x5FE054F073B46FDC587125D25EE272AC6278FD8DCDB14792D6C7BF52636E597B'); //('0x' + process.env.TAPTRUST_PRIVATEKEY);
 
 var fs = require('fs');
 var ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
 var ProxyWalletABI = ProxyWallet['abi'];
 
-var FactoryAddress = '0x64edfe6555ffc7f4d69e217f24543894c9ee3f56';
+var FactoryAddress = '0x670c562bdcac60256befae7f4534c99a10d32e72';
 var WalletFactory = JSON.parse(fs.readFileSync('./contracts/WalletFactory.json', 'utf8'));
 var WalletFactoryABI = WalletFactory['abi'];
 
