@@ -83,7 +83,7 @@ var relaySendTransactionMessage = function () {
 
 					case 8:
 						receipt = _context2.sent;
-						return _context2.abrupt('return', { "receipt": receipt, "error": error });
+						return _context2.abrupt('return', { "receipt": receipt });
 
 					case 10:
 					case 'end':
