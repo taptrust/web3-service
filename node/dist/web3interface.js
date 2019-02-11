@@ -57,7 +57,7 @@ var fs = require('fs');
 var ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
 var ProxyWalletABI = ProxyWallet['abi'];
 
-var FactoryAddress = '0xe70530198859bcbbd471aa86a93e05c4a4fd874c';
+var FactoryAddress = '0xe111577f52389a845ee432c99ba1bf86fa08da00';
 var WalletFactory = JSON.parse(fs.readFileSync('./contracts/WalletFactory.json', 'utf8'));
 var WalletFactoryABI = WalletFactory['abi'];
 
