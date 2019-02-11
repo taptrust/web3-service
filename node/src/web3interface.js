@@ -7,7 +7,7 @@ const fs = require('fs');
 const ProxyWallet = JSON.parse(fs.readFileSync('./contracts/ProxyWallet.json', 'utf8'));
 const ProxyWalletABI = ProxyWallet['abi'];
 
-const FactoryAddress = '0xe70530198859bcbbd471aa86a93e05c4a4fd874c'; 
+const FactoryAddress = '0xe111577f52389a845ee432c99ba1bf86fa08da00'; 
 const WalletFactory = JSON.parse(fs.readFileSync('./contracts/WalletFactory.json', 'utf8'));
 const WalletFactoryABI = WalletFactory['abi'];
 
